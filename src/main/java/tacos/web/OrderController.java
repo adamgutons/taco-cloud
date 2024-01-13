@@ -1,5 +1,6 @@
 package tacos.web;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,12 +11,15 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.TacoOrder;
+import tacos.data.JdbcOrderRepository;
 
 @Slf4j
 @Controller
+@AllArgsConstructor
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
 public class OrderController {
+    private JdbcOrderRepository orderRepository;
 
     @GetMapping("/current")
     public String orderForm() {
@@ -23,16 +27,17 @@ public class OrderController {
     }
 
     @PostMapping
-    public String processOrder(@Valid TacoOrder order,
-                               Errors errors,
-                               SessionStatus sessionStatus) {
+    public String processOrder(final @Valid TacoOrder order,
+                               final Errors errors,
+                               final SessionStatus sessionStatus) {
 
         if (errors.hasErrors()) {
             return "orderForm";
         }
 
-        log.info("Order submitted: {}", order);
+        orderRepository.save(order);
         sessionStatus.setComplete();
+        log.info("Order submitted: {}", order);
 
         return "redirect:/";
     }

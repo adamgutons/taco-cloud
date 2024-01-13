@@ -1,6 +1,7 @@
 package tacos.web;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,34 +11,26 @@ import tacos.Ingredient;
 import tacos.Ingredient.Type;
 import tacos.Taco;
 import tacos.TacoOrder;
+import tacos.data.JdbcIngredientRepository;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+    private final JdbcIngredientRepository ingredientRepository;
+
     @ModelAttribute
-    public void addIngredientsToModel(Model model) {
-
-        List<Ingredient> ingredients = Arrays.asList(
-                new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
-                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
-                new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
-                new Ingredient("CARN", "Carnitas", Type.PROTEIN),
-                new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
-                new Ingredient("LETC", "Lettuce", Type.VEGGIES),
-                new Ingredient("CHED", "Cheddar", Type.CHEESE),
-                new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
-                new Ingredient("SLSA", "Salsa", Type.SAUCE),
-                new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
-        );
-
-        Arrays.stream(Type.values()).forEach(type -> model.addAttribute(type.toString().toLowerCase(),
-                filterByType(ingredients, type)));
+    public void addIngredientsToModel(final Model model) {
+        final Iterable<Ingredient> ingredients = ingredientRepository.findAll();
+        final Type[] types = Ingredient.Type.values();
+        Arrays.stream(types).forEach(type ->
+                model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type)));
     }
 
     @ModelAttribute(name = "tacoOrder")
@@ -56,9 +49,9 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(@Valid Taco taco,
-                              Errors errors,
-                              @ModelAttribute TacoOrder tacoOrder) {
+    public String processTaco(final @Valid Taco taco,
+                              final Errors errors,
+                              final @ModelAttribute TacoOrder tacoOrder) {
 
         if (errors.hasErrors()) {
             return "design";
@@ -70,9 +63,9 @@ public class DesignTacoController {
         return "redirect:/orders/current";
     }
 
-    private Iterable<Ingredient> filterByType(final List<Ingredient> ingredients, final Type type) {
-        return ingredients.stream()
-                .filter(ingredient -> ingredient.getType().equals(type))
+    private Iterable<Ingredient> filterByType(final Iterable<Ingredient> ingredients, final Type type) {
+        return StreamSupport.stream(ingredients.spliterator(), false)
+                .filter(i -> i.getType().equals(type))
                 .toList();
     }
 
