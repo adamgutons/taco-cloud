@@ -12,10 +12,9 @@ h1, h3 {
 form {
     max-width: 600px;
     margin: 20px auto;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 img {
