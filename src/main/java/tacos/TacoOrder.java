@@ -1,5 +1,6 @@
 package tacos;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -11,13 +12,16 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@Entity
 public class TacoOrder {
 
     private static final Long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Date placedAt;
+    private Date placedAt = new Date();
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;
@@ -43,7 +47,7 @@ public class TacoOrder {
 
     @Digits(integer = 3, fraction = 0, message = "Invalid CCV")
     private String ccCVV;
-
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco) {

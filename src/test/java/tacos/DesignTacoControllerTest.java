@@ -11,9 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
-import tacos.data.JdbcIngredientRepository;
-import tacos.data.JdbcOrderRepository;
 import tacos.web.DesignTacoController;
+import tacos.web.OrderController;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,10 +32,10 @@ class DesignTacoControllerTest {
     private final MockMvc mockMvc;
     private List<Ingredient> ingredients;
     @MockBean
-    private JdbcIngredientRepository ingredientRepository;
+    private IngredientRepository ingredientRepository;
 
     @MockBean
-    private JdbcOrderRepository orderRepository;
+    private OrderController orderRepository;
 
     @BeforeEach
     public void setup() {

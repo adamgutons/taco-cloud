@@ -11,7 +11,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.TacoOrder;
-import tacos.data.JdbcOrderRepository;
+import tacos.data.OrderRepository;
 
 @Slf4j
 @Controller
@@ -21,7 +21,7 @@ import tacos.data.JdbcOrderRepository;
 public class OrderController {
 
     private static final String VIEW_NAME = "orderForm";
-    private JdbcOrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
     @GetMapping("/current")
     public String orderForm() {

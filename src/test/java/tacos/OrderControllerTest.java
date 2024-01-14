@@ -10,8 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
-import tacos.data.JdbcIngredientRepository;
-import tacos.data.JdbcOrderRepository;
+import tacos.data.OrderRepository;
 
 import static net.andreinc.mockneat.unit.financial.CreditCards.creditCards;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,10 +27,10 @@ class OrderControllerTest {
     private final MockMvc mockMvc;
 
     @MockBean
-    private JdbcIngredientRepository ingredientRepository;
+    private IngredientRepository ingredientRepository;
 
     @MockBean
-    private JdbcOrderRepository jdbcOrderRepository;
+    private OrderRepository jdbcOrderRepository;
 
     @Test
     void testProcessOrder() throws Exception {

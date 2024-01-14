@@ -9,8 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
-import tacos.data.JdbcIngredientRepository;
-import tacos.data.JdbcOrderRepository;
+import tacos.data.OrderRepository;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,10 +23,10 @@ class HomeControllerTest {
     private final MockMvc mockMvc;
 
     @MockBean
-    private JdbcIngredientRepository ingredientRepository;
+    private IngredientRepository ingredientRepository;
 
     @MockBean
-    private JdbcOrderRepository jdbcOrderRepository;
+    private OrderRepository jdbcOrderRepository;
 
     @Test
     void testHomePage() throws Exception {
