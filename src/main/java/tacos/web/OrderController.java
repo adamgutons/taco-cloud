@@ -19,11 +19,13 @@ import tacos.data.OrderRepository;
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
 public class OrderController {
+
+    private static final String VIEW_NAME = "orderForm";
     private OrderRepository orderRepository;
 
     @GetMapping("/current")
     public String orderForm() {
-        return "orderForm";
+        return VIEW_NAME;
     }
 
     @PostMapping
@@ -32,7 +34,7 @@ public class OrderController {
                                final SessionStatus sessionStatus) {
 
         if (errors.hasErrors()) {
-            return "orderForm";
+            return VIEW_NAME;
         }
 
         orderRepository.save(order);
