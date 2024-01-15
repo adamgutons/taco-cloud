@@ -15,7 +15,7 @@ public class TacoCloudApplication {
 
     @Bean
     @SuppressWarnings("unused")
-    public CommandLineRunner dataLoader(IngredientRepository repo) {
+    public CommandLineRunner dataLoader(final IngredientRepository repo) {
         return args -> {
             repo.save(new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP));
             repo.save(new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP));
