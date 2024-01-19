@@ -11,7 +11,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.TacoOrder;
-import tacos.data.JdbcOrderRepository;
+import tacos.data.OrderRepository;
 
 @Slf4j
 @Controller
@@ -19,11 +19,13 @@ import tacos.data.JdbcOrderRepository;
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
 public class OrderController {
-    private JdbcOrderRepository orderRepository;
+
+    private static final String VIEW_NAME = "orderForm";
+    private OrderRepository orderRepository;
 
     @GetMapping("/current")
     public String orderForm() {
-        return "orderForm";
+        return VIEW_NAME;
     }
 
     @PostMapping
@@ -32,7 +34,7 @@ public class OrderController {
                                final SessionStatus sessionStatus) {
 
         if (errors.hasErrors()) {
-            return "orderForm";
+            return VIEW_NAME;
         }
 
         orderRepository.save(order);

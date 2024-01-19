@@ -11,7 +11,7 @@ import tacos.Ingredient;
 import tacos.Ingredient.Type;
 import tacos.Taco;
 import tacos.TacoOrder;
-import tacos.data.JdbcIngredientRepository;
+import tacos.data.IngredientRepository;
 
 import java.util.Arrays;
 import java.util.stream.StreamSupport;
@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
-    private final JdbcIngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepository;
 
     @ModelAttribute
     public void addIngredientsToModel(final Model model) {

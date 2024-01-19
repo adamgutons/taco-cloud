@@ -6,11 +6,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
-import tacos.data.JdbcIngredientRepository;
-import tacos.data.JdbcOrderRepository;
+import tacos.data.OrderRepository;
+import tacos.data.UserRepository;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,12 +26,19 @@ class HomeControllerTest {
     private final MockMvc mockMvc;
 
     @MockBean
-    private JdbcIngredientRepository ingredientRepository;
+    private IngredientRepository ingredientRepository;
 
     @MockBean
-    private JdbcOrderRepository jdbcOrderRepository;
+    private OrderRepository jdbcOrderRepository;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     @Test
+    @WithMockUser(username = "user", roles = "USER")
     void testHomePage() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
