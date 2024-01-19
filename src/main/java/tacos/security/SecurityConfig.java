@@ -38,7 +38,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
         httpSecurity
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers(toH2Console())
+                        .ignoringRequestMatchers(toH2Console())     // need to remove h2console settings for deployment
                         .disable()
                 )
                 .authorizeHttpRequests(authorize -> authorize

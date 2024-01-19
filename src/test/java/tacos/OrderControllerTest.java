@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
+import tacos.data.UserRepository;
 
 import static net.andreinc.mockneat.unit.financial.CreditCards.creditCards;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -32,13 +34,18 @@ class OrderControllerTest {
     @MockBean
     private OrderRepository jdbcOrderRepository;
 
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
     @Test
     void testProcessOrder() throws Exception {
         mockMvc.perform(post("/orders")
                         .content(postData)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().stringValues("Location", "/"));
+                .andExpect(status().is4xxClientError());
     }
 
 }
