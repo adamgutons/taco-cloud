@@ -13,6 +13,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
+@SuppressWarnings("unused")
 public class SecurityConfig {
 
     @Bean
@@ -38,5 +39,4 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-
 }
