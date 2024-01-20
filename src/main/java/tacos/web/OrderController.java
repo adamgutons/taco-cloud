@@ -24,11 +24,13 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @GetMapping("/current")
+    @SuppressWarnings("unused")
     public String orderForm() {
         return VIEW_NAME;
     }
 
     @PostMapping
+    @SuppressWarnings("unused")
     public String processOrder(final @Valid TacoOrder order,
                                final Errors errors,
                                final SessionStatus sessionStatus) {

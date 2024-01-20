@@ -14,9 +14,9 @@ import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
 import tacos.data.UserRepository;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest

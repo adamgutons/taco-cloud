@@ -28,6 +28,7 @@ public class Taco {
     @ManyToMany()
     private List<Ingredient> ingredients = new ArrayList<>();
 
+    @SuppressWarnings("unused")
     public void addIngredient(Ingredient ingredient) {
         this.ingredients.add(ingredient);
     }

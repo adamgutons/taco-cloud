@@ -5,6 +5,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@SuppressWarnings("unused")
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

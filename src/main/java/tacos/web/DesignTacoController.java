@@ -26,6 +26,7 @@ public class DesignTacoController {
     private final IngredientRepository ingredientRepository;
 
     @ModelAttribute
+    @SuppressWarnings("unused")
     public void addIngredientsToModel(final Model model) {
         final Iterable<Ingredient> ingredients = ingredientRepository.findAll();
         final Type[] types = Ingredient.Type.values();
@@ -34,6 +35,7 @@ public class DesignTacoController {
     }
 
     @ModelAttribute(name = "tacoOrder")
+    @SuppressWarnings("unused")
     public TacoOrder order() {
         return new TacoOrder();
     }
@@ -44,11 +46,13 @@ public class DesignTacoController {
     }
 
     @GetMapping
+    @SuppressWarnings("unused")
     public String showDesignForm() {
         return "design";
     }
 
     @PostMapping
+    @SuppressWarnings("unused")
     public String processTaco(final @Valid Taco taco,
                               final Errors errors,
                               final @ModelAttribute TacoOrder tacoOrder) {

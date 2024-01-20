@@ -17,11 +17,13 @@ public class RegistrationController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping
+    @SuppressWarnings("unused")
     public String registerForm() {
         return "registration";
     }
 
     @PostMapping
+    @SuppressWarnings("unused")
     public String processRegistration(final RegistrationForm registrationForm) {
         userRepository.save(registrationForm.toUser(passwordEncoder));
         return "redirect:/login";
