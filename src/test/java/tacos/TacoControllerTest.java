@@ -2,28 +2,32 @@ package tacos;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
 import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
+import tacos.web.api.TacoController;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest
+@WebMvcTest(TacoController.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @SuppressWarnings("unused")
-class HomeControllerTest {
+class TacoControllerTest {
+
     private final MockMvc mockMvc;
 
     @MockBean
@@ -43,10 +47,20 @@ class HomeControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
-    void testHomePage() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/login"));
-    }
+    void recentTacos() throws Exception {
+        // Arrange
+        final Taco taco1 = new Taco();
+        final Taco taco2 = new Taco();
+        final List<Taco> tacos = Arrays.asList(taco1, taco2);
 
+        when(tacoRepository.findAll(PageRequest.of(0, 12, Sort.by("createdAt").descending())))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(tacos));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/tacos?recent"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
 }
