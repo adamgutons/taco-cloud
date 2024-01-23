@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
+import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
 
 import static net.andreinc.mockneat.unit.financial.CreditCards.creditCards;
@@ -39,6 +40,9 @@ class OrderControllerTest {
 
     @MockBean
     private PasswordEncoder passwordEncoder;
+
+    @MockBean
+    private TacoRepository tacoRepository;
 
     @Test
     void testProcessOrder() throws Exception {
