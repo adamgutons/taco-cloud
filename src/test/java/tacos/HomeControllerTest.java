@@ -3,7 +3,6 @@ package tacos;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,7 +42,7 @@ class HomeControllerTest {
     @MockBean
     private TacoRepository tacoRepository;
 
-    @Mock
+    @MockBean
     private TacoService tacoService;
 
     @Test

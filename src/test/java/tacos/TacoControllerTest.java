@@ -15,6 +15,7 @@ import tacos.data.OrderRepository;
 import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
 import tacos.web.api.TacoController;
+import tacos.web.api.TacoService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,20 +44,17 @@ class TacoControllerTest {
     private PasswordEncoder passwordEncoder;
 
     @MockBean
-    private TacoRepository tacoRepository;
+    private TacoService tacoService;
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
     void recentTacos() throws Exception {
-        // Arrange
         final Taco taco1 = new Taco();
         final Taco taco2 = new Taco();
         final List<Taco> tacos = Arrays.asList(taco1, taco2);
 
-        when(tacoRepository.findAll(PageRequest.of(0, 12, Sort.by("createdAt").descending())))
-                .thenReturn(new org.springframework.data.domain.PageImpl<>(tacos));
+        when(tacoService.recentTacos()).thenReturn(tacos);
 
-        // Act & Assert
         mockMvc.perform(get("/api/tacos?recent"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))

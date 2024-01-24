@@ -14,6 +14,7 @@ import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
 import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
+import tacos.web.api.TacoService;
 
 import static net.andreinc.mockneat.unit.financial.CreditCards.creditCards;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +44,9 @@ class OrderControllerTest {
 
     @MockBean
     private TacoRepository tacoRepository;
+
+    @MockBean
+    private TacoService tacoService;
 
     @Test
     void testProcessOrder() throws Exception {
