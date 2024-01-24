@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -68,9 +66,10 @@ class DesignTacoControllerTest {
                 new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE)
         );
 
-        Taco design = new Taco();
-        design.setName("Test Taco");
+        final Taco design = Taco.builder().name("test name").build();
 
+        when(tacoService.saveTaco(design)).thenReturn(design);
+        when(tacoRepository.save(design)).thenReturn(design);
         when(ingredientRepository.findAll())
                 .thenReturn(ingredients);
 
@@ -100,12 +99,6 @@ class DesignTacoControllerTest {
     @Test
     @WithMockUser(username="testuser", password="testpass", roles = "USER")
     void processTaco() throws Exception {
-
-        Taco design = new Taco();
-        design.setName("Test Taco");
-
-        when(tacoService.saveTaco(design)).thenReturn(design);
-        when(tacoRepository.save(design)).thenReturn(design);
 
         mockMvc.perform(post("/design")
                         .content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")

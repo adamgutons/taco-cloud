@@ -30,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TacoControllerTest {
 
     private final MockMvc mockMvc;
+    private final Taco taco1 = Taco.builder().build();
+    private final Taco taco2 = Taco.builder().build();
 
     @MockBean
     private IngredientRepository ingredientRepository;
@@ -49,8 +51,7 @@ class TacoControllerTest {
     @Test
     @WithMockUser(username = "user", roles = "USER")
     void recentTacos() throws Exception {
-        final Taco taco1 = new Taco();
-        final Taco taco2 = new Taco();
+
         final List<Taco> tacos = Arrays.asList(taco1, taco2);
 
         when(tacoService.recentTacos()).thenReturn(tacos);
