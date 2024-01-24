@@ -27,32 +27,10 @@ public class SecurityConfig {
         return new MvcRequestMatcher.Builder(introspector);
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
-        httpSecurity
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(antMatcher("/design"), antMatcher("/orders")).hasRole("USER")
-                        .requestMatchers(mvc.pattern("/"), mvc.pattern("/**")).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/design"));
-
-        return httpSecurity.build();
-    }
-
-    //TODO implement dev/production profiles
-
-//      h2db/dev config
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
 //        httpSecurity
-//                .csrf(csrf -> csrf
-//                        .ignoringRequestMatchers(toH2Console())
-//                        .disable()
-//                )
 //                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(toH2Console()).permitAll()
 //                        .requestMatchers(antMatcher("/design"), antMatcher("/orders")).hasRole("USER")
 //                        .requestMatchers(mvc.pattern("/"), mvc.pattern("/**")).permitAll()
 //                        .anyRequest().authenticated()
@@ -62,4 +40,26 @@ public class SecurityConfig {
 //
 //        return httpSecurity.build();
 //    }
+
+    //TODO implement dev/production profiles
+
+//      h2db/dev config
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
+        httpSecurity
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(toH2Console())
+                        .disable()
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(toH2Console()).permitAll()
+                        .requestMatchers(antMatcher("/design"), antMatcher("/orders")).hasRole("USER")
+                        .requestMatchers(mvc.pattern("/"), mvc.pattern("/**")).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/design"));
+
+        return httpSecurity.build();
+    }
 }
