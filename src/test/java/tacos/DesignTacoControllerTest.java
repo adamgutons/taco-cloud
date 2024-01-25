@@ -7,13 +7,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
 import tacos.web.DesignTacoController;
 import tacos.web.OrderController;
+import tacos.web.api.TacoService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -41,7 +45,11 @@ class DesignTacoControllerTest {
     @MockBean
     private UserRepository userRepository;
 
-//    private DesignRepository designRepository;
+    @MockBean
+    private TacoService tacoService;
+
+    @MockBean
+    private TacoRepository tacoRepository;
 
     @BeforeEach
     public void setup() {
@@ -58,9 +66,10 @@ class DesignTacoControllerTest {
                 new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE)
         );
 
-        Taco design = new Taco();
-        design.setName("Test Taco");
+        final Taco design = Taco.builder().name("test name").build();
 
+        when(tacoService.saveTaco(design)).thenReturn(design);
+        when(tacoRepository.save(design)).thenReturn(design);
         when(ingredientRepository.findAll())
                 .thenReturn(ingredients);
 
@@ -87,16 +96,15 @@ class DesignTacoControllerTest {
                 .andExpect(model().attribute("sauce", ingredients.subList(8, 10)));
     }
 
-//    @Test
-//    @WithMockUser(username="testuser", password="testpass", authorities = "ROLE_USER")
-//    void processTaco() throws Exception {
-//        when(designRepository.save(design)).thenReturn(design);
-//
-//        mockMvc.perform(post("/design")
-//                        .content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
-//                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(header().stringValues("Location", "/orders/current"));
-//    }
+    @Test
+    @WithMockUser(username="testuser", password="testpass", roles = "USER")
+    void processTaco() throws Exception {
+
+        mockMvc.perform(post("/design")
+                        .content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().stringValues("Location", "/orders/current"));
+    }
 
 }

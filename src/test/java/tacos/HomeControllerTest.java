@@ -14,6 +14,7 @@ import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
 import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
+import tacos.web.api.TacoService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,6 +41,9 @@ class HomeControllerTest {
 
     @MockBean
     private TacoRepository tacoRepository;
+
+    @MockBean
+    private TacoService tacoService;
 
     @Test
     @WithMockUser(username = "user", roles = "USER")

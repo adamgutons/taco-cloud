@@ -36,3 +36,8 @@ input[type="password"] {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
+span.validationError {
+    color: #d9534f;
+    display: block
+}

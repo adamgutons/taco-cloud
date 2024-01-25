@@ -1,14 +1,10 @@
 package tacos.web.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import tacos.Taco;
-import tacos.data.TacoRepository;
 
 import java.util.List;
 
@@ -16,14 +12,26 @@ import java.util.List;
 @RequestMapping(path = "/api/tacos", produces = "application/json")
 @CrossOrigin(origins = "http://tacocloud:8080")
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class TacoController {
 
-    private final TacoRepository tacoRepository;
+    private final TacoService tacoService;
 
     @GetMapping(params = "recent")
     public List<Taco> recentTacos() {
-        PageRequest pageRequest = PageRequest
-                .of(0, 12, Sort.by("createdAt").descending());
-        return tacoRepository.findAll(pageRequest).getContent();
+        return tacoService.recentTacos();
     }
+
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Taco> tacoById(final @PathVariable("id") Long id) {
+        return tacoService.getTacoById(id);
+    }
+
+    @PostMapping(consumes = "application/json", path = "new")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Taco postTacos(final @RequestBody Taco userTaco) {
+        return tacoService.saveTaco(userTaco);
+    }
+
 }
